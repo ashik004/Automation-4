@@ -1,0 +1,62 @@
+package bd.com.Automation;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
+public class AutomationExam4 extends BaseDriver{
+	
+	@Test(priority = 0)
+	public void openUrl() throws InterruptedException {
+		
+		driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+		driver.manage().window().maximize();
+		Thread.sleep(3000);
+	}
+	
+	@Test(priority = 1)
+	public void Alert () throws InterruptedException{
+		
+		SoftAssert softAssert = new SoftAssert();
+		
+		WebElement JsAlert = driver.findElement(By.xpath("//button[contains(text(),'Click for JS Alert')]"));
+		WebElement JsConfirm = driver.findElement(By.xpath("//button[contains(text(),'Click for JS Confirm')]"));
+		WebElement JsPrompt = driver.findElement(By.xpath("//button[contains(text(),'Click for JS Prompt')]"));
+		WebElement result = driver.findElement(By.xpath("//p[@id='result']"));
+		
+		
+		JsAlert.click();
+		Thread.sleep(2000);
+		driver.switchTo().alert().accept();
+		Thread.sleep(2000);
+		String resultText = result.getText();
+		softAssert.assertEquals(resultText, "You successfully clicked alert");
+		Thread.sleep(2000);
+		
+		JsConfirm.click();
+		Thread.sleep(2000);
+		driver.switchTo().alert().dismiss();
+		Thread.sleep(2000);
+		resultText = result.getText();
+		softAssert.assertEquals(resultText, "You clicked: Ok");
+		Thread.sleep(3000);
+		
+		
+		JsPrompt.click();
+		Thread.sleep(2000);	
+		driver.switchTo().alert().sendKeys("Hello Automation");
+		driver.switchTo().alert().accept();
+		Thread.sleep(2000);
+		resultText = result.getText();
+		softAssert.assertEquals(resultText, "You entered: Hello Automation");
+		Thread.sleep(3000);	
+		
+		softAssert.assertAll();
+		
+		
+	}
+
+}
